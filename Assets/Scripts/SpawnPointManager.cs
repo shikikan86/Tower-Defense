@@ -15,7 +15,7 @@ public class SpawnPointManager : MonoBehaviour
     {
         rate = 1.6f;
         timeUntilNextDP = rate;
-        deploymentPoints = 10;
+        deploymentPoints = 12;
         dp_text.text = "DP: " + deploymentPoints.ToString();
     }
 

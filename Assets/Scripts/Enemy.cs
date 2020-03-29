@@ -13,6 +13,10 @@ public class Enemy : MonoBehaviour
 
     public float health;
 
+    public float startHeath;
+
+    public Image healthBar;
+
     public bool death;
 
     //Raycast
@@ -25,9 +29,9 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        
+        startHeath = 3f;
         death = false;
-        health = 3.0f;
+        health = 3f;
         speed = 1f;
         waypointIndex = 0;
         target = Waypoints.points[0];  
@@ -55,9 +59,10 @@ public class Enemy : MonoBehaviour
                 if (hit.collider.tag == "enemy1")
                 {
                     health -= 1;
+                    healthBar.fillAmount = health / startHeath;
                     if(health <= 0)
                     {
-                        SpawnPointManager.deploymentPoints++;
+                        SpawnPointManager.deploymentPoints += 5;
                         //int points = SpawnPointManager.deploymentPoints;
                         Destroy(hit.collider.gameObject);
                     }
