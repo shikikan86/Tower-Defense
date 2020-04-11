@@ -10,6 +10,8 @@ public class SpawnPointManager : MonoBehaviour
     public float timeUntilNextDP;
     public Text dp_text;
 
+    public static int towerLives = 3;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +19,7 @@ public class SpawnPointManager : MonoBehaviour
         timeUntilNextDP = rate;
         deploymentPoints = 12;
         dp_text.text = "DP: " + deploymentPoints.ToString();
+        Time.timeScale = 0; //NEW
     }
 
     // Update is called once per frame

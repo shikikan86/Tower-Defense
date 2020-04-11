@@ -19,6 +19,11 @@ public class Enemy : MonoBehaviour
 
     public bool death;
 
+    public Text tower_lives_text;
+
+    public AudioSource source;
+    public AudioClip wilhelm;
+
     //Raycast
     public float length = 300f;
     public LayerMask mask;
@@ -34,11 +39,16 @@ public class Enemy : MonoBehaviour
         health = 3f;
         speed = 1f;
         waypointIndex = 0;
-        target = Waypoints.points[0];  
+        target = Waypoints.points[0];
+        source = GetComponent<AudioSource>();
+        source.clip = wilhelm;
+        //tower_lives_text.text = "Lives: 3"; 
     }
 
     void Update()
     {
+        tower_lives_text.text = "Lives: " + SpawnPointManager.towerLives.ToString();
+        // tower_lives_text.text = "Lives: " + tower_lives.ToString();
         Vector3 direction = target.position - transform.position;
         transform.Translate(direction.normalized * speed * Time.deltaTime);
 
@@ -47,6 +57,10 @@ public class Enemy : MonoBehaviour
             NextWaypoint();
         } 
 
+        if(SpawnPointManager.towerLives <= 0)
+        {
+            Time.timeScale = 0;
+        }
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -62,6 +76,7 @@ public class Enemy : MonoBehaviour
                     healthBar.fillAmount = health / startHeath;
                     if(health <= 0)
                     {
+                        source.PlayOneShot(source.clip);
                         SpawnPointManager.deploymentPoints += 5;
                         //int points = SpawnPointManager.deploymentPoints;
                         Destroy(hit.collider.gameObject);
@@ -75,8 +90,12 @@ public class Enemy : MonoBehaviour
     //switching to the next Transform in the array
     void NextWaypoint()
     {
+        
         if(waypointIndex >= Waypoints.points.Length - 1)
         {
+            SpawnPointManager.towerLives--;
+            Debug.Log(SpawnPointManager.towerLives);
+            
             Destroy(gameObject);
             return;
         }
